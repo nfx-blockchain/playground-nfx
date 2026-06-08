@@ -1,0 +1,83 @@
+// SPDX-License-Identifier: MIT
+pragma nfx ^1.0.0;
+
+contract MultiSigDAO {
+    mapping(address => bool) isOwner;
+    mapping(address => bool) proposalApproved;
+
+    uint256 public requiredApprovals;
+    uint256 public proposalCount;
+
+    struct Proposal {
+        address to;
+        uint64 amount;
+        string description;
+        uint256 approvals;
+        bool executed;
+        int64 createdAt;
+    }
+
+    mapping(uint256 => Proposal) proposals;
+
+    constructor(uint256 _required) {
+        requiredApprovals = _required;
+    }
+
+    function addOwner(address owner) public {
+        isOwner[owner] = true;
+    }
+
+    function removeOwner(address owner) public {
+        isOwner[owner] = false;
+    }
+
+    function submitProposal(address to, uint64 amount, string description) public {
+        Proposal storage p = proposals[proposalCount];
+        p.to = to;
+        p.amount = amount;
+        p.description = description;
+        p.approvals = 0;
+        p.executed = false;
+        p.createdAt = now;
+        proposalCount++;
+        emit ProposalSubmitted(msg.sender, proposalCount - 1, to, amount, description);
+    }
+
+    function approve(uint256 proposalId) public {
+        require(isOwner[msg.sender], "Not an owner");
+        Proposal storage p = proposals[proposalId];
+        require(!p.executed, "Already executed");
+
+        if (!proposalApproved[msg.sender]) {
+            p.approvals++;
+            proposalApproved[msg.sender] = true;
+
+            if (p.approvals >= requiredApprovals) {
+                executeProposal(proposalId);
+            }
+        }
+        emit Approval(msg.sender, proposalId);
+    }
+
+    function executeProposal(uint256 proposalId) internal {
+        Proposal storage p = proposals[proposalId];
+        p.executed = true;
+        // Transfer would happen here
+        emit ProposalExecuted(proposalId);
+    }
+
+    function getProposal(uint256 proposalId) public view returns (
+        address to, uint64 amount, string description, uint256 approvals, bool executed
+    ) {
+        Proposal storage p = proposals[proposalId];
+        return (p.to, p.amount, p.description, p.approvals, p.executed);
+    }
+
+    function canExecute(uint256 proposalId) public view returns (bool) {
+        return proposals[proposalId].approvals >= requiredApprovals;
+    }
+
+    event ProposalSubmitted(address indexed proposer, uint256 indexed proposalId, address to, uint64 amount, string description);
+    event Approval(address indexed approver, uint256 indexed proposalId);
+    event ProposalExecuted(uint256 indexed proposalId);
+}

@@ -1,0 +1,141 @@
+// SPDX-License-Identifier: MIT
+pragma nfx ^1.0.0;
+
+contract IslandLand {
+    struct Island {
+        address owner;
+        int width;
+        int height;
+        int64 score;
+        int64 lastExpansion;
+        int totalRentals;
+        int totalBuildings;
+        int totalSubdivisions;
+    }
+
+    struct LandLot {
+        address owner;
+        int x, y, width, height;
+        bool rented;
+        int64 rentAmount;
+        string buildingType;
+    }
+
+    mapping(uint256 => Island) islands;
+    mapping(uint256 => mapping(int => mapping(int => LandLot))) lots;
+    uint256 public islandCount;
+
+    function createIsland(uint256 islandId) public payable {
+        require(msg.value >= 1000 NFX, "Insufficient NFX (1000 required)");
+        Island storage island = islands[islandId];
+        island.owner = msg.sender;
+        island.width = 8;
+        island.height = 8;
+        island.score = 0;
+        island.lastExpansion = now;
+        island.totalRentals = 0;
+        island.totalBuildings = 0;
+        island.totalSubdivisions = 0;
+        islandCount++;
+        emit IslandCreated(islandId, msg.sender);
+    }
+
+    function subdivide(uint256 islandId, int x, int y, int w, int h) public payable {
+        Island storage island = islands[islandId];
+        require(island.owner == msg.sender, "Not island owner");
+        int64 cost = w * h * 100;
+        require(msg.value >= cost, "Insufficient NFX");
+
+        LandLot storage lot = lots[islandId][x][y];
+        lot.owner = msg.sender;
+        lot.x = x;
+        lot.y = y;
+        lot.width = w;
+        lot.height = h;
+        island.totalSubdivisions++;
+
+        emit LandSubdivided(islandId, x, y, w, h);
+    }
+
+    function build(uint256 islandId, int x, int y, string buildingType) public payable {
+        require(lots[islandId][x][y].owner != 0, "No lot exists");
+        int64 cost = getBuildCost(buildingType);
+        require(msg.value >= cost, "Insufficient NFX");
+
+        lots[islandId][x][y].buildingType = buildingType;
+        islands[islandId].totalBuildings++;
+        islands[islandId].score += getScoreBonus(buildingType);
+
+        emit BuildingBuilt(islandId, x, y, buildingType);
+    }
+
+    function rent(uint256 islandId, int x, int y, int64 duration) public payable {
+        LandLot storage lot = lots[islandId][x][y];
+        require(lot.rented == false, "Already rented");
+        lots[islandId][x][y].rented = true;
+        lots[islandId][x][y].rentAmount = msg.value;
+        islands[islandId].totalRentals++;
+        islands[islandId].score += (int64)(msg.value / 100); // 1 score per 100 NFX
+        emit LotRented(islandId, x, y, msg.sender, msg.value);
+    }
+
+    function expandIsland(uint256 islandId) public payable {
+        Island storage island = islands[islandId];
+        require(island.owner == msg.sender, "Not owner");
+
+        int64 requiredScore = (int64)island.width * island.height * 100;
+        require(island.score >= requiredScore, "Score insufficient");
+
+        int64 minTime = 86400 * 7; // 7 days
+        require((now - island.lastExpansion) >= minTime, "Too soon for expansion");
+
+        int64 expandCost = (int64)island.width * island.height * 50;
+        require(msg.value >= expandCost, "Insufficient NFX for expansion");
+
+        island.width *= 2;
+        island.height *= 2;
+        island.lastExpansion = now;
+
+        emit IslandExpanded(islandId, island.width, island.height);
+    }
+
+    function getBuildCost(string buildingType) internal pure returns (int64) {
+        if (buildingType == "house") return 500 NFX;
+        if (buildingType == "store") return 1000 NFX;
+        if (buildingType == "bar") return 750 NFX;
+        if (buildingType == "hotel") return 2000 NFX;
+        return 100 NFX;
+    }
+
+    function getScoreBonus(string buildingType) internal pure returns (int64) {
+        if (buildingType == "house") return 50;
+        if (buildingType == "store") return 100;
+        if (buildingType == "bar") return 75;
+        if (buildingType == "hotel") return 200;
+        return 10;
+    }
+
+    function getIslandInfo(uint256 islandId) public view returns (Island) {
+        return islands[islandId];
+    }
+
+    function analyzeExpansion(uint256 islandId) public view returns (string) {
+        Island storage island = islands[islandId];
+        int64 requiredScore = (int64)island.width * island.height * 100;
+
+        if (island.score >= requiredScore) {
+            int64 minTime = 86400 * 7;
+            if ((now - island.lastExpansion) >= minTime) {
+                return "expand_ready";
+            }
+            return "waiting_period";
+        }
+        return "insufficient_score";
+    }
+
+    event IslandCreated(uint256 indexed islandId, address indexed owner);
+    event LandSubdivided(uint256 indexed islandId, int x, int y, int w, int h);
+    event BuildingBuilt(uint256 indexed islandId, int x, int y, string buildingType);
+    event LotRented(uint256 indexed islandId, int x, int y, address indexed renter, int64 amount);
+    event IslandExpanded(uint256 indexed islandId, int width, int height);
+}

@@ -1,0 +1,72 @@
+// SPDX-License-Identifier: MIT
+pragma nfx ^1.0.0;
+
+contract NFCollection {
+    string public name;
+    string public symbol;
+    uint256 public nextTokenId;
+
+    mapping(uint256 => address) ownerOf;
+    mapping(uint256 => address) operatorApproval;
+    mapping(uint256 => string) tokenURI;
+
+    constructor(string _name, string _symbol) {
+        name = _name;
+        symbol = _symbol;
+        nextTokenId = 1;
+    }
+
+    function mint(address to, uint256 tokenId, string _uri) public {
+        require(ownerOf[tokenId] == 0, "Already minted");
+        ownerOf[tokenId] = to;
+        tokenURI[tokenId] = _uri;
+        emit Transfer(0, to, tokenId);
+    }
+
+    function nextToken() public returns (uint256) {
+        return nextTokenId++;
+    }
+
+    function balanceOf(address owner) public view returns (uint256) {
+        uint256 count = 0;
+        for (uint256 i = 1; i < nextTokenId; i++) {
+            if (ownerOf[i] == owner) count++;
+        }
+        return count;
+    }
+
+    function tokenOfOwnerByIndex(address owner, uint256 index) public view returns (uint256) {
+        uint256 count = 0;
+        for (uint256 i = 1; i < nextTokenId; i++) {
+            if (ownerOf[i] == owner) {
+                if (count == index) return i;
+                count++;
+            }
+        }
+        return 0;
+    }
+
+    function setApprovalForAll(address operator, bool approved) public {
+        if (approved) {
+            operatorApproval[msg.sender] = operator;
+        } else {
+            operatorApproval[msg.sender] = 0;
+        }
+        emit ApprovalForAll(msg.sender, operator, approved);
+    }
+
+    function transferFrom(address from, address to, uint256 tokenId) public {
+        address owner = ownerOf[tokenId];
+        require(owner == msg.sender || operatorApproval[msg.sender] == from, "Not approved");
+        require(owner == from, "Invalid owner");
+        ownerOf[tokenId] = to;
+        emit Transfer(from, to, tokenId);
+    }
+
+    function getApproved(uint256 tokenId) public view returns (address) {
+        return operatorApproval[ownerOf[tokenId]];
+    }
+
+    event Transfer(address indexed from, address indexed to, uint256 tokenId);
+    event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
+}

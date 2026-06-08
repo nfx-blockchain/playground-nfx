@@ -1,0 +1,55 @@
+// SPDX-License-Identifier: MIT
+pragma nfx ^1.0.0;
+
+import "./SimpleToken.nfx";
+
+contract AdvancedToken is SimpleToken {
+    bool public paused = false;
+    address public owner = msg.sender;
+    address public minter;
+
+    modifier whenNotPaused() {
+        require(!paused, "Token is paused");
+        _;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
+        _;
+    }
+
+    modifier onlyMinter() {
+        require(msg.sender == minter, "Not minter");
+        _;
+    }
+
+    function setMinter(address _minter) public onlyOwner {
+        minter = _minter;
+    }
+
+    function pause() public onlyOwner {
+        paused = true;
+        emit Pause(true);
+    }
+
+    function unpause() public onlyOwner {
+        paused = false;
+        emit Pause(false);
+    }
+
+    function mint(address to, uint64 amount) public onlyMinter whenNotPaused {
+        balanceOf[to] += amount;
+        totalSupply += amount;
+        emit Mint(to, amount);
+    }
+
+    function burn(uint64 amount) public whenNotPaused {
+        require(balanceOf[msg.sender] >= amount, "Insufficient balance");
+        balanceOf[msg.sender] -= amount;
+        totalSupply -= amount;
+        emit Burn(msg.sender, amount);
+    }
+
+    event Pause(bool state);
+    event Burn(address indexed from, uint64 value);
+}
