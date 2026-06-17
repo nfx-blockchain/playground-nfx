@@ -12,6 +12,43 @@ export const Docs: React.FC<DocsProps> = ({ onBack }) => {
     navigator.clipboard.writeText(text);
   };
 
+  const contractTemplate = `pragma nfx ^1.0.0;
+
+contract ContractName {
+    // Your code here
+}`;
+
+  const simpleStorage = `pragma nfx ^1.0.0;
+
+contract SimpleStorage {
+    uint256 public value;
+    
+    function setValue(uint256 _value) public {
+        value = _value;
+    }
+    
+    function getValue() public view returns (uint256) {
+        return value;
+    }
+}`;
+
+  const tokenContract = `pragma nfx ^1.0.0;
+
+contract SimpleToken {
+    string public name;
+    string public symbol;
+    uint256 public totalSupply;
+    
+    mapping(address => uint256) public balanceOf;
+    
+    constructor() {
+        name = "My Token";
+        symbol = "MTK";
+        totalSupply = 1000000;
+        balanceOf[msg.sender] = totalSupply;
+    }
+}`;
+
   return (
     <div className="docs-page">
       <div className="docs-container">
@@ -48,16 +85,10 @@ export const Docs: React.FC<DocsProps> = ({ onBack }) => {
             <h2>Contract Structure</h2>
             <div className="docs-card">
               <p>Every NFX contract starts with a pragma and contains a contract definition:</p>
-              <pre className="docs-code-block" onClick={() => copyToClipboard(`pragma nfx ^1.0.0;
-
-contract ContractName {
-    // Your code here
-}`)}><span className="docs-comment">pragma nfx ^1.0.0;</span>
-{`
-
-contract ContractName {
-    // Your code here
-}`}</pre>
+              <pre className="docs-code-block" onClick={() => copyToClipboard(contractTemplate)}>
+                <span className="docs-comment">pragma nfx ^1.0.0;</span>
+                {contractTemplate.substring(contractTemplate.indexOf('\n'))}
+              </pre>
             </div>
           </section>
 
@@ -66,66 +97,16 @@ contract ContractName {
             
             <div className="docs-card">
               <h3>Simple Storage</h3>
-              <pre className="docs-code-block" onClick={() => copyToClipboard(`pragma nfx ^1.0.0;
-
-contract SimpleStorage {
-    uint256 public value;
-    
-    function setValue(uint256 _value) public {
-        value = _value;
-    }
-    
-    function getValue() public view returns (uint256) {
-        return value;
-    }
-}`)}>{`pragma nfx ^1.0.0;
-
-contract SimpleStorage {
-    uint256 public value;
-    
-    function setValue(uint256 _value) public {
-        value = _value;
-    }
-    
-    function getValue() public view returns (uint256) {
-        return value;
-    }
-}`}</pre>
+              <pre className="docs-code-block" onClick={() => copyToClipboard(simpleStorage)}>
+                {simpleStorage}
+              </pre>
             </div>
 
             <div className="docs-card">
               <h3>Token Contract</h3>
-              <pre className="docs-code-block" onClick={() => copyToClipboard(`pragma nfx ^1.0.0;
-
-contract SimpleToken {
-    string public name;
-    string public symbol;
-    uint256 public totalSupply;
-    
-    mapping(address => uint256) public balanceOf;
-    
-    constructor() {
-        name = "My Token";
-        symbol = "MTK";
-        totalSupply = 1000000;
-        balanceOf[msg.sender] = totalSupply;
-    }
-}`)}>{`pragma nfx ^1.0.0;
-
-contract SimpleToken {
-    string public name;
-    string public symbol;
-    uint256 public totalSupply;
-    
-    mapping(address => uint256) public balanceOf;
-    
-    constructor() {
-        name = "My Token";
-        symbol = "MTK";
-        totalSupply = 1000000;
-        balanceOf[msg.sender] = totalSupply;
-    }
-}`}</pre>
+              <pre className="docs-code-block" onClick={() => copyToClipboard(tokenContract)}>
+                {tokenContract}
+              </pre>
             </div>
           </section>
 

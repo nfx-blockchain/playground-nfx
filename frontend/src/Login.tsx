@@ -43,7 +43,7 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
             <div className="login-card">
                 <div className="login-header">
                     <div className="login-logo">⚡</div>
-                    <h1>NFX Contract Playground</h1>
+                    <h1>NFXLabs</h1>
                     <p className="subtitle">Web IDE for NFX Smart Contracts</p>
                 </div>
                 

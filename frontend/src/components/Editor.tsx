@@ -69,7 +69,7 @@ contract SimpleToken {
         }
     }, [theme]);
 
-    return <div ref={editorRef} className="editor-container" />;
+    return <div ref={editorRef} style={{ height: '100%', width: '100%' }} className="editor-container" />;
 };
 
 export default ContractEditor;
