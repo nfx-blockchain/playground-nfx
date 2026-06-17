@@ -30,7 +30,7 @@ export const Docs: React.FC<DocsProps> = ({ onBack }) => {
               {theme === 'dark' ? '☀️' : '🌙'}
             </button>
           </div>
-          <h1>📚 NFX Playground Documentation</h1>
+          <h1>📚 NFXLabs Documentation</h1>
           <p>Complete guide for writing, compiling and deploying smart contracts</p>
         </header>
 

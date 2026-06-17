@@ -23,7 +23,7 @@ export const Header: React.FC<HeaderProps> = ({ networkInfo, onLogout, onDocsTog
             <span className="logo-icon">⚡</span>
           </div>
           <div className="brand-text">
-            <h1 className="brand-title">NFX Playground</h1>
+            <h1 className="brand-title">NFXLabs</h1>
             <span className="brand-subtitle">Smart Contract IDE</span>
           </div>
         </div>

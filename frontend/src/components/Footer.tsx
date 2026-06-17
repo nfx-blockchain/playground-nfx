@@ -5,7 +5,7 @@ export const Footer: React.FC = () => {
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-brand">
-          <span className="footer-logo">⚡ NFX Playground</span>
+          <span className="footer-logo">⚡ NFXLabs</span>
           <span className="footer-copyright">
             © {new Date().getFullYear()} NFX Labs. All rights reserved.
           </span>
