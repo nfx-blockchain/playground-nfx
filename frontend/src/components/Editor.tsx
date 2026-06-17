@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import * as monaco from 'monaco-editor';
+import { useTheme } from '../ThemeContext';
 
 export const ContractEditor: React.FC = () => {
     const editorRef = useRef<HTMLDivElement>(null);
     const monacoInstance = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+    const { theme } = useTheme();
 
     useEffect(() => {
         if (editorRef.current && !monacoInstance.current) {
@@ -21,13 +23,12 @@ contract SimpleToken {
     }
 }`,
                 language: 'nfx',
-                theme: 'vs-dark',
+                theme: theme === 'dark' ? 'vs-dark' : 'vs',
                 fontSize: 14,
                 minimap: { enabled: false },
                 automaticLayout: true,
             });
 
-            // Define NFX language
             monaco.languages.register({ id: 'nfx' });
             monaco.languages.setMonarchTokensProvider('nfx', {
                 keywords: [
@@ -62,7 +63,13 @@ contract SimpleToken {
         };
     }, []);
 
-    return <div ref={editorRef} style={{ height: '500px', width: '100%' }} />;
+    useEffect(() => {
+        if (monacoInstance.current) {
+            monaco.editor.setTheme(theme === 'dark' ? 'vs-dark' : 'vs');
+        }
+    }, [theme]);
+
+    return <div ref={editorRef} className="editor-container" />;
 };
 
 export default ContractEditor;

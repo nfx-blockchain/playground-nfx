@@ -20,6 +20,7 @@ function App() {
         blocks: 0,
         connections: 0
     });
+    const [activeTab, setActiveTab] = useState<'editor' | 'compiler' | 'deploy'>('editor');
 
     useEffect(() => {
         const access = localStorage.getItem('nfx_playground_access');
@@ -54,8 +55,28 @@ function App() {
                 <>
                     <Header networkInfo={networkInfo} onLogout={handleLogout} />
                     <main className="main">
+                        <div className="mobile-tabs">
+                            <button 
+                                className={`mobile-tab ${activeTab === 'editor' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('editor')}
+                            >
+                                Editor
+                            </button>
+                            <button 
+                                className={`mobile-tab ${activeTab === 'compiler' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('compiler')}
+                            >
+                                Compiler
+                            </button>
+                            <button 
+                                className={`mobile-tab ${activeTab === 'deploy' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('deploy')}
+                            >
+                                Deploy
+                            </button>
+                        </div>
                         <div className="panels">
-                            <div className="panel">
+                            <div className={`panel ${activeTab !== 'editor' ? 'mobile-hidden' : ''}`}>
                                 <div className="panel-header">
                                     <h2>Editor</h2>
                                     <span className="panel-icon">📝</span>
@@ -64,14 +85,14 @@ function App() {
                                     <ContractEditor />
                                 </div>
                             </div>
-                            <div className="panel">
+                            <div className={`panel ${activeTab !== 'compiler' ? 'mobile-hidden' : ''}`}>
                                 <div className="panel-header">
                                     <h2>Compiler Output</h2>
                                     <span className="panel-icon">⚙️</span>
                                 </div>
                                 <CompilerOutput output={compilerOutput} />
                             </div>
-                            <div className="panel">
+                            <div className={`panel ${activeTab !== 'deploy' ? 'mobile-hidden' : ''}`}>
                                 <div className="panel-header">
                                     <h2>Deploy</h2>
                                     <span className="panel-icon">🚀</span>
