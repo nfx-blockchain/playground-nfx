@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { NFXProvider } from 'id-nfx';
+import { useTheme } from './ThemeContext';
 
 export const Login: React.FC = () => {
     const [accessing, setAccessing] = useState(false);
+    const { theme, toggleTheme } = useTheme();
 
     const connectWallet = async () => {
         setAccessing(true);
@@ -22,12 +24,21 @@ export const Login: React.FC = () => {
 
     return (
         <div className="login-container">
+            <button 
+                className="theme-toggle theme-toggle-floating" 
+                onClick={toggleTheme}
+                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            >
+                {theme === 'dark' ? '☀️' : '🌙'}
+            </button>
             <div className="login-card">
-                <div className="logo">⚡</div>
-                <h1>NFX Contract Playground</h1>
-                <p className="subtitle">Web IDE for NFX Smart Contracts</p>
+                <div className="login-header">
+                    <div className="login-logo">⚡</div>
+                    <h1>NFX Contract Playground</h1>
+                    <p className="subtitle">Web IDE for NFX Smart Contracts</p>
+                </div>
                 
-                <p className="description">
+                <p className="login-description">
                     Write, compile, and deploy smart contracts on the NFX blockchain.
                     Fully compatible with NFX addresses (starts with 'B').
                 </p>
@@ -65,7 +76,7 @@ export const Login: React.FC = () => {
                     </button>
                     
                     <button 
-                        className="demo-btn" 
+                        className="secondary-btn" 
                         onClick={startDemo}
                     >
                         Demo Mode (Offline)

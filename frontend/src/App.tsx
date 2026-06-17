@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ContractEditor } from './components/Editor';
 import { Deploy } from './components/Deploy';
 import { CompilerOutput } from './components/Compiler';
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
 import Login from './Login';
 import { NFXProvider } from 'id-nfx';
 import './App.css';
@@ -46,35 +48,43 @@ function App() {
         setHasAccess(false);
     };
 
-    if (!hasAccess) {
-        return <Login />;
-    }
-
     return (
         <div className="app">
-            <header>
-                <h1>NFX Contract Playground</h1>
-                <button onClick={handleLogout} className="logout-btn">Logout</button>
-            </header>
-            <main>
-                <div className="panels">
-                    <div className="panel">
-                        <h2>Editor</h2>
-                        <ContractEditor />
-                    </div>
-                    <div className="panel">
-                        <h2>Compiler Output</h2>
-                        <CompilerOutput output={compilerOutput} />
-                    </div>
-                    <div className="panel">
-                        <h2>Deploy</h2>
-                        <Deploy bytecode={compilerOutput.bytecode} abi={compilerOutput.abi} />
-                    </div>
-                </div>
-            </main>
-            <footer className="network-footer">
-                <span className="network-badge">{networkInfo.name} • Block: {networkInfo.blocks} • Connections: {networkInfo.connections}</span>
-            </footer>
+            {hasAccess ? (
+                <>
+                    <Header networkInfo={networkInfo} onLogout={handleLogout} />
+                    <main className="main">
+                        <div className="panels">
+                            <div className="panel">
+                                <div className="panel-header">
+                                    <h2>Editor</h2>
+                                    <span className="panel-icon">📝</span>
+                                </div>
+                                <div className="editor-container">
+                                    <ContractEditor />
+                                </div>
+                            </div>
+                            <div className="panel">
+                                <div className="panel-header">
+                                    <h2>Compiler Output</h2>
+                                    <span className="panel-icon">⚙️</span>
+                                </div>
+                                <CompilerOutput output={compilerOutput} />
+                            </div>
+                            <div className="panel">
+                                <div className="panel-header">
+                                    <h2>Deploy</h2>
+                                    <span className="panel-icon">🚀</span>
+                                </div>
+                                <Deploy bytecode={compilerOutput.bytecode} abi={compilerOutput.abi} />
+                            </div>
+                        </div>
+                    </main>
+                    <Footer />
+                </>
+            ) : (
+                <Login />
+            )}
         </div>
     );
 }

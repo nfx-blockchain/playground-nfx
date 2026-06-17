@@ -1,8 +1,15 @@
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
-    height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }

@@ -1,59 +1,96 @@
 # NFX Contract Playground
 
-Web-based IDE para compilar e deployar contratos NFX na blockchain.
+Web-based IDE for compiling and deploying NFX smart contracts on the blockchain.
 
-## Início Rápido (Offline)
+## Live Demo
+
+🚀 **Launch Playground:** http://localhost:5173 (after running dev server)
+
+## Quick Start
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
 
 ```bash
-cd playground/frontend
+cd frontend
 npm install
 npm run dev
 ```
 
-Acesso: http://localhost:3000
+The application will be available at `http://localhost:5173`
 
-## Funcionalidades
+## Features
 
-- **Editor:** Syntax highlighting NFX (Monaco Editor)
-- **Compiler:** Compile .nfx → bytecode (funciona offline)
-- **Deploy:** Conecta wallet → deploy na blockchain (requer conexão)
-
-## Estrutura
-
-```
-playground/
-├── frontend/          # React UI
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Editor.tsx      # Monaco editor
-│   │   │   ├── Deploy.tsx      # Deploy form
-│   │   │   └── Compiler.tsx    # Compile output
-│   └── package.json
-├── compiler/          # NFX → Bytecode
-│   └── nfx-compiler.js
-├── examples/          # Contratos de exemplo
-└── README.md
-```
+| Feature | Description | Status |
+|---------|-------------|--------|
+| 📝 Editor | Monaco Editor with NFX syntax highlighting | ✅ Available |
+| ⚙️ Compiler | NFX → Bytecode compilation (works offline) | ✅ Available |
+| 🚀 Deploy | Connect wallet and deploy to blockchain | 🔗 Requires connection |
+| 🔍 Interact | Call contract functions and query state | 🔗 Requires connection |
 
 ## Tech Stack
 
-- **Frontend:** React + TypeScript + Monaco Editor
-- **Compiler:** Node.js (parser NFX)
-- **Network:** Conecta via RPC ao nó NFX
+- **Frontend:** React + TypeScript + Vite
+- **Editor:** Monaco Editor (@monaco-editor/react)
+- **Theming:** CSS Variables with dark/light mode
+- **Network:** NFX RPC via `id-nfx` provider
 
-## Uso
+## Project Structure
 
-```bash
-cd playground/frontend
-npm install
-npm run dev
+```
+frontend/
+├── src/
+│   ├── components/
+│   │   ├── Header.tsx        # Navigation header
+│   │   ├── Footer.tsx        # Footer component
+│   │   ├── Editor.tsx        # Code editor
+│   │   ├── Compiler.tsx      # Compile output display
+│   │   └── Deploy.tsx        # Deploy form
+│   ├── ThemeContext.tsx      # Dark/Light theme provider
+│   ├── App.tsx             # Main application
+│   └── index.css           # Global styles
+├── package.json
+└── tsconfig.json
 ```
 
+## Theme
 
+The playground includes a professional dark/light theme toggle:
+- **Dark mode** (default): Modern dark interface optimized for coding
+- **Light mode**: Clean, minimalist interface for daylight use
 
-## Deploy
+Theme preference is saved to localStorage and respects system preference.
 
-1. Conecte wallet
-2. Compilar contrato (.nfx)
-3. Deploy na blockchain
-4. Interagir via UI
+## Development
+
+```bash
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Usage
+
+1. **Connect Wallet** or use Demo Mode (offline)
+2. **Write** your NFX smart contract in the editor
+3. **Compile** to generate bytecode
+4. **Deploy** to testnet or mainnet with connected wallet
+5. **Interact** with deployed contracts
+
+## Network Connection
+
+The application connects to NFX RPC endpoints:
+- Default: `http://localhost:27444`
+- Configurable via `NFXProvider` initialization
+
+## License
+
+MIT License - NFX Labs

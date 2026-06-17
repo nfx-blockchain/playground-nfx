@@ -21,14 +21,14 @@ export const Deploy: React.FC<DeployProps> = ({ bytecode, abi }) => {
     return (
         <div className="deploy-panel">
             {!walletConnected ? (
-                <button onClick={connectWallet}>Connect Wallet</button>
+                <button className="secondary-btn" onClick={connectWallet}>Connect Wallet</button>
             ) : (
                 <>
                     <div className="bytecode-preview">
                         <strong>Bytecode:</strong>
                         <code>{bytecode.slice(0, 60)}...</code>
                     </div>
-                    <button onClick={deployContract} disabled={deploying}>
+                    <button className="wallet-btn" onClick={deployContract} disabled={deploying}>
                         {deploying ? 'Deploying...' : 'Deploy Contract'}
                     </button>
                 </>
