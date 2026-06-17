@@ -4,6 +4,7 @@ import { Deploy } from './components/Deploy';
 import { CompilerOutput } from './components/Compiler';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { Docs } from './components/Docs';
 import Login from './Login';
 import { NFXProvider } from 'id-nfx';
 import './App.css';
@@ -21,6 +22,7 @@ function App() {
         connections: 0
     });
     const [activeTab, setActiveTab] = useState<'editor' | 'compiler' | 'deploy'>('editor');
+    const [showDocs, setShowDocs] = useState(false);
 
     const checkAccess = useCallback(() => {
         const access = localStorage.getItem('nfx_playground_access');
@@ -66,11 +68,20 @@ function App() {
         setHasAccess(false);
     };
 
+    if (showDocs) {
+        return <Docs onBack={() => setShowDocs(false)} />;
+    }
+
     return (
         <div className="app">
             {hasAccess ? (
                 <>
-                    <Header networkInfo={networkInfo} onLogout={handleLogout} />
+                    <Header 
+                        networkInfo={networkInfo} 
+                        onLogout={handleLogout} 
+                        onDocsToggle={() => setShowDocs(true)}
+                        showDocsLink={true}
+                    />
                     <main className="main">
                         <div className="mobile-tabs">
                             <button 
