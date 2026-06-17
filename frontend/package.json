@@ -11,7 +11,8 @@
     "@monaco-editor/react": "^4.7.0",
     "monaco-editor": "^0.48.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "id-nfx": "file:../../id-nfxchain"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.0",

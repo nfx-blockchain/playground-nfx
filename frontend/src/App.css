@@ -139,3 +139,69 @@ main {
 .demo-btn:hover {
     background: #1a1a2e;
 }
+
+.logo {
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.subtitle {
+    color: #aaa;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.description {
+    color: #ccc;
+    text-align: center;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.feature-card {
+    background: #16213e;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid #0f3460;
+}
+
+.feature-card .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.feature-card h3 {
+    color: #e94560;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.network-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #16213e;
+    border-top: 1px solid #0f3460;
+    padding: 0.5rem 2rem;
+    text-align: center;
+    z-index: 100;
+}
+
+.network-badge {
+    background: #0f3460;
+    color: #e94560;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}

@@ -3,6 +3,7 @@ import { ContractEditor } from './components/Editor';
 import { Deploy } from './components/Deploy';
 import { CompilerOutput } from './components/Compiler';
 import Login from './Login';
+import { NFXProvider } from 'id-nfx';
 import './App.css';
 
 function App() {
@@ -12,11 +13,33 @@ function App() {
         abi: [],
         errors: [] as string[]
     });
+    const [networkInfo, setNetworkInfo] = useState({
+        name: 'Unknown',
+        blocks: 0,
+        connections: 0
+    });
 
     useEffect(() => {
         const access = localStorage.getItem('nfx_playground_access');
         if (access) setHasAccess(true);
     }, []);
+
+    useEffect(() => {
+        if (hasAccess) {
+            const provider = new NFXProvider({ rpc: 'http://localhost:27444' });
+            provider.getinfo().then(info => {
+                if (info) {
+                    setNetworkInfo({
+                        name: info.testnet ? 'Testnet' : 'Mainnet',
+                        blocks: info.blocks,
+                        connections: info.connections
+                    });
+                }
+            }).catch(() => {
+                setNetworkInfo({ name: 'Offline', blocks: 0, connections: 0 });
+            });
+        }
+    }, [hasAccess]);
 
     const handleLogout = () => {
         localStorage.removeItem('nfx_playground_access');
@@ -49,6 +72,9 @@ function App() {
                     </div>
                 </div>
             </main>
+            <footer className="network-footer">
+                <span className="network-badge">{networkInfo.name} • Block: {networkInfo.blocks} • Connections: {networkInfo.connections}</span>
+            </footer>
         </div>
     );
 }
