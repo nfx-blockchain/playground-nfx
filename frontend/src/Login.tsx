@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { NFXProvider } from 'id-nfx';
 import { useTheme } from './ThemeContext';
 
-export const Login: React.FC = () => {
+interface LoginProps {
+  onSuccess?: () => void;
+}
+
+export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
     const [accessing, setAccessing] = useState(false);
     const { theme, toggleTheme } = useTheme();
 
@@ -13,13 +17,18 @@ export const Login: React.FC = () => {
             await provider.requestAccounts();
             localStorage.setItem('nfx_playground_access', 'wallet');
         } catch (e) {
-            localStorage.setItem('nfx_playground_access', 'demo');
+            // If wallet connection fails, still grant offline access
+            localStorage.setItem('nfx_playground_access', 'offline');
         }
+        window.dispatchEvent(new CustomEvent('nfx-login'));
+        onSuccess?.();
         setAccessing(false);
     };
 
-    const startDemo = () => {
-        localStorage.setItem('nfx_playground_access', 'demo');
+    const enterOfflineMode = () => {
+        localStorage.setItem('nfx_playground_access', 'offline');
+        window.dispatchEvent(new CustomEvent('nfx-login'));
+        onSuccess?.();
     };
 
     return (
@@ -77,9 +86,9 @@ export const Login: React.FC = () => {
                     
                     <button 
                         className="secondary-btn" 
-                        onClick={startDemo}
+                        onClick={enterOfflineMode}
                     >
-                        Demo Mode (Offline)
+                        Open Editor (Offline Mode)
                     </button>
                 </div>
             </div>

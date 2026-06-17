@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ContractEditor } from './components/Editor';
 import { Deploy } from './components/Deploy';
 import { CompilerOutput } from './components/Compiler';
@@ -22,10 +22,27 @@ function App() {
     });
     const [activeTab, setActiveTab] = useState<'editor' | 'compiler' | 'deploy'>('editor');
 
-    useEffect(() => {
+    const checkAccess = useCallback(() => {
         const access = localStorage.getItem('nfx_playground_access');
-        if (access) setHasAccess(true);
+        setHasAccess(!!access);
     }, []);
+
+    useEffect(() => {
+        checkAccess();
+        
+        // Listen for storage changes (useful for multi-tab sync)
+        const handleStorageChange = () => checkAccess();
+        window.addEventListener('storage', handleStorageChange);
+        
+        // Listen for custom login event
+        const handleLoginEvent = () => checkAccess();
+        window.addEventListener('nfx-login', handleLoginEvent);
+        
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+            window.removeEventListener('nfx-login', handleLoginEvent);
+        };
+    }, [checkAccess]);
 
     useEffect(() => {
         if (hasAccess) {
@@ -104,7 +121,7 @@ function App() {
                     <Footer />
                 </>
             ) : (
-                <Login />
+                <Login onSuccess={checkAccess} />
             )}
         </div>
     );

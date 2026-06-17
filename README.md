@@ -79,11 +79,12 @@ npm run preview
 
 ## Usage
 
-1. **Connect Wallet** or use Demo Mode (offline)
-2. **Write** your NFX smart contract in the editor
-3. **Compile** to generate bytecode
-4. **Deploy** to testnet or mainnet with connected wallet
-5. **Interact** with deployed contracts
+1. **Connect Wallet** to deploy contracts on the blockchain
+2. **Or use Offline Mode** to write and compile contracts without a wallet
+3. **Write** your NFX smart contract in the editor
+4. **Compile** to generate bytecode
+5. **Deploy** to testnet or mainnet with connected wallet (requires wallet)
+6. **Interact** with deployed contracts (requires connection)
 
 ## Network Connection
 
