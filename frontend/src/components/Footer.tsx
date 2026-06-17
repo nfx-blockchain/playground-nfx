@@ -12,13 +12,13 @@ export const Footer: React.FC = () => {
         </div>
         
         <div className="footer-links">
-          <a href="https://docs.nfx.com" target="_blank" rel="noopener noreferrer" className="footer-link">
+          <a href="https://docs.nfxblockchain.com" target="_blank" rel="noopener noreferrer" className="footer-link">
             Documentation
           </a>
-          <a href="https://github.com/nfx" target="_blank" rel="noopener noreferrer" className="footer-link">
+          <a href="https://github.com/nfx-blockchain" target="_blank" rel="noopener noreferrer" className="footer-link">
             GitHub
           </a>
-          <a href="https://discord.gg/nfx" target="_blank" rel="noopener noreferrer" className="footer-link">
+          <a href="https://discord.gg/kz5Ke4ZTxf" target="_blank" rel="noopener noreferrer" className="footer-link">
             Discord
           </a>
         </div>

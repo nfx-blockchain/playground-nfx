@@ -21,8 +21,8 @@ export const Header: React.FC<HeaderProps> = ({ networkInfo, onLogout }) => {
             <span className="logo-icon">⚡</span>
           </div>
           <div className="brand-text">
-            <h1 className="brand-title">NFX Playground</h1>
-            <span className="brand-subtitle">Smart Contract IDE</span>
+            <h1 className="brand-title">NFX LAB</h1>
+            <span className="brand-subtitle">Powered by NFX Team</span>
           </div>
         </div>
 
