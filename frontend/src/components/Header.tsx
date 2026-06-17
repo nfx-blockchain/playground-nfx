@@ -43,11 +43,12 @@ export const Header: React.FC<HeaderProps> = ({ networkInfo, onLogout, onDocsTog
           
           {showDocsLink && (
             <button 
-              className="theme-toggle" 
+              className="docs-toggle" 
               onClick={onDocsToggle}
               aria-label="Documentation"
+              style={{ width: 'auto', padding: '0 0.75rem' }}
             >
-              📚
+              📚 Docs
             </button>
           )}
           

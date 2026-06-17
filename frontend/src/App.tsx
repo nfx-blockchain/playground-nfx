@@ -104,25 +104,25 @@ function App() {
                             </button>
                         </div>
                         <div className="panels">
-                            <div className={`panel ${activeTab !== 'editor' ? 'mobile-hidden' : ''}`}>
+                            <div className={`panel ${activeTab !== 'editor' ? 'mobile-hidden' : ''} editor-panel`}>
                                 <div className="panel-header">
-                                    <h2>Editor</h2>
+                                    <h2>Contract Editor</h2>
                                     <span className="panel-icon">📝</span>
                                 </div>
                                 <div className="editor-container">
                                     <ContractEditor />
                                 </div>
                             </div>
-                            <div className={`panel ${activeTab !== 'compiler' ? 'mobile-hidden' : ''}`}>
+                            <div className={`panel ${activeTab !== 'compiler' ? 'mobile-hidden' : ''} other-panel`}>
                                 <div className="panel-header">
                                     <h2>Compiler Output</h2>
                                     <span className="panel-icon">⚙️</span>
                                 </div>
                                 <CompilerOutput output={compilerOutput} />
                             </div>
-                            <div className={`panel ${activeTab !== 'deploy' ? 'mobile-hidden' : ''}`}>
+                            <div className={`panel ${activeTab !== 'deploy' ? 'mobile-hidden' : ''} other-panel`}>
                                 <div className="panel-header">
-                                    <h2>Deploy</h2>
+                                    <h2>Deploy Contract</h2>
                                     <span className="panel-icon">🚀</span>
                                 </div>
                                 <Deploy bytecode={compilerOutput.bytecode} abi={compilerOutput.abi} />
